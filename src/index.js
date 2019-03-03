@@ -1,38 +1,56 @@
 window.onload = () => {
   const canvas = document.getElementById('canvas');
   const context = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  const canvasWidth = window.innerWidth;
+  const canvasHeight = window.innerHeight;
+  const canvasStartX = 0;
+  const canvasStartY = 0;
+  const canvasEndX = canvasWidth;
+  const canvasEndY = canvasHeight;
+  canvas.width = canvasWidth;
+  canvas.height = canvasHeight;
 
-  const initNoOfPoints = 50;
-  const minNoOfPoints = 40;
+  const initNoOfPoints = 60;
+  const minNoOfPoints = initNoOfPoints;
+  const refreshInterval = 8;
+  const lowestRefreshRate = 8;
 
-  const directionsArray = [
-    [1, 1],
-    [1, -1],
-    [1, 0],
-    [-1, 1],
-    [-1, -1],
-    [-1, 0],
-    [0, -1],
-    [0, 1],
-  ];
-  const directionLength = directionsArray.length;
+  function getNewPoint(edgePoint = false) {
+    const refreshOnFrame = Math.floor(Math.random() * lowestRefreshRate) + 1;
 
-  function getNewPoint() {
-    const randomDirectionIndex = Math.floor(Math.random() * directionLength);
-    const randomDirection = directionsArray[randomDirectionIndex];
+    if (!edgePoint) {
+      const diffX = (Math.random() * 2) - 1;
+      const diffY = (Math.random() * 2) - 1;
+      const diff = [diffX, diffY];
 
-    const clientX = window.innerWidth;
-    const x = Math.floor(Math.random() * clientX);
+      const clientX = window.innerWidth;
+      const x = Math.floor(Math.random() * clientX);
 
-    const clientY = window.innerHeight;
-    const y = Math.floor(Math.random() * clientY);
+      const clientY = window.innerHeight;
+      const y = Math.floor(Math.random() * clientY);
 
-    return {
-      coords: [x, y],
-      diff: randomDirection,
-    };
+      return {
+        coords: [x, y],
+        diff,
+        refreshOnFrame,
+      };
+    } else {
+      const diffX = (Math.random() * 2) - 1;
+      const diffY = (Math.random() * 2) - 1;
+      const diff = [diffX, diffY];
+
+      const clientX = window.innerWidth;
+      const x = Math.floor(Math.random() * clientX);
+
+      const clientY = window.innerHeight;
+      const y = Math.floor(Math.random() * clientY);
+
+      return {
+        coords: [x, y],
+        diff,
+        refreshOnFrame,
+      };
+    }
   }
 
   function getNewPoints() {
@@ -57,15 +75,16 @@ window.onload = () => {
     );
   }
 
-  function drawLine(startPoint, endPoint, strokeStyle, c) {
+  function drawLine(startPoint, endPoint, strokeStyle, lineWidth, c) {
     c.beginPath();
     c.moveTo(startPoint[0], startPoint[1]);
     c.lineTo(endPoint[0], endPoint[1]);
     c.strokeStyle = strokeStyle;
+    c.lineWidth = lineWidth;
     c.stroke();
   }
 
-  function connectPoints(pointsToConnect, lineRadius, c) {
+  function drawLines(pointsToConnect, lineRadius, c) {
     for (let pointFirst of pointsToConnect) {
       for (let pointSecond of pointsToConnect) {
         const startPoint = pointFirst.coords;
@@ -74,45 +93,85 @@ window.onload = () => {
         const isLinePresent = lineDistance !== 0 && lineDistance <= lineRadius;
 
         if (isLinePresent) {
-          const opacity = 1 - (lineDistance / lineRadius);
-          drawLine(startPoint, endPoint, `rgba(255, 255, 255, ${opacity})`, c);
+          const strokeWidth = 1 - (lineDistance / lineRadius);
+          drawLine(startPoint, endPoint, `rgba(255, 255, 255, 0.4)`, strokeWidth, c);
         }
       }
     }
   }
 
-  function movePoints(pointsToAnimate) {
-    for (let i = 0; i < pointsToAnimate.length; i++) {
-      const pointInfo = pointsToAnimate[i];
+  function movePoints(pointsToAnimate, timesRefreshed) {
+    return pointsToAnimate.map((pointInfo, index) => {
       const point = pointInfo.coords;
       const diffX = pointInfo.diff[0];
       const diffY = pointInfo.diff[1];
-      const coords = [point[0] + diffX, point[1] + diffY];
+      const isToBeMoved = timesRefreshed % point.refreshOnFrame !== 0;
+      const coords = isToBeMoved
+        ? [point[0] + diffX, point[1] + diffY]
+        : point;
 
-      pointsToAnimate[i] = { ...pointInfo, coords };
-    }
+      return { ...pointInfo, coords };
+    })
   }
 
-  function showPoints(pointsToShow, strokeStyle, c) {
+  function drawPoints(pointsToShow, strokeStyle, c) {
     for (let pointInfo of pointsToShow) {
       const point = pointInfo.coords;
       c.beginPath();
       c.arc(point[0], point[1], 3, 0, Math.PI * 2, false)
-      c.strokeStyle = strokeStyle;
-      c.stroke();
+      c.fillStyle = strokeStyle;
+      c.fill();
     }
   }
 
-  function animate(pointsToAnimate, canvasToDraw, c) {
-    c.clearRect(0, 0, canvasToDraw.width, canvasToDraw.height);
-    showPoints(pointsToAnimate, 'green', c);
-    connectPoints(pointsToAnimate, 150, c);
-    movePoints(pointsToAnimate);
+  function isPointOnCanvas(point) {
+    if (
+      (point[0] > canvasStartX && point[0] < canvasEndX) &&
+      (point[1] > canvasStartY && point[1] < canvasEndY)
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  const pointsArray = getNewPoints();
-  console.log(pointsArray);
-  // animate(pointsArray)
-  setInterval(animate, 10, pointsArray, canvas, context);
-}
+  function updatePoints(pointsToUpdate) {
+    const totalPoints = pointsToUpdate.length;
+    const pointsToAdd = minNoOfPoints - totalPoints;
+    const updatedPoints = pointsToUpdate.filter(
+      pointInfo => isPointOnCanvas(pointInfo.coords)
+    );
 
+    for (let i = 0; i < pointsToAdd; i++) {
+      const newPoint = getNewPoint(true);
+
+      updatedPoints.push(newPoint);
+    }
+
+    return updatedPoints;
+  }
+
+  function drawObjects(pointsToAnimate, canvasToDraw, c) {
+    c.clearRect(0, 0, canvasToDraw.width, canvasToDraw.height);
+    drawPoints(pointsToAnimate, 'rgba(255, 0, 0, 0.7)', c);
+    drawLines(pointsToAnimate, 150, c);
+  }
+
+  function calculateUpdatedPoints(prevPoints, timesRefreshed) {
+    const newPoints = movePoints(prevPoints, timesRefreshed);
+    return updatePoints(newPoints);
+  }
+
+  function animate() {
+    let pointsArray = getNewPoints();
+    let timesRefreshed = 0;
+    console.log(pointsArray)
+
+    return function() {
+      drawObjects(pointsArray, canvas, context);
+      pointsArray = calculateUpdatedPoints(pointsArray, timesRefreshed++);
+    }
+  }
+
+  setInterval(animate(), refreshInterval);
+}

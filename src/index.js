@@ -10,15 +10,21 @@ window.onload = () => {
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
 
-  const initNoOfPoints = 60;
+  const initNoOfPoints = 80;
   const minNoOfPoints = initNoOfPoints;
   const refreshInterval = 8;
-  const lowestRefreshRate = 8;
+  const lowestRefreshRate = refreshInterval - 1;
+  const highestRefreshRate = 3;
+  const maxPointRadius = 3;
 
   function getNewPoint(edgePoint = false) {
-    const refreshOnFrame = Math.floor(Math.random() * lowestRefreshRate) + 1;
+    const refreshRateFactor = lowestRefreshRate - highestRefreshRate;
+    const refreshOnFrame = Math.floor(
+      Math.random() * refreshRateFactor
+    ) + highestRefreshRate;
+    const pointRadius = Math.floor(Math.random() * maxPointRadius) + 1;
 
-    if (!edgePoint) {
+    {
       const diffX = (Math.random() * 2) - 1;
       const diffY = (Math.random() * 2) - 1;
       const diff = [diffX, diffY];
@@ -33,22 +39,7 @@ window.onload = () => {
         coords: [x, y],
         diff,
         refreshOnFrame,
-      };
-    } else {
-      const diffX = (Math.random() * 2) - 1;
-      const diffY = (Math.random() * 2) - 1;
-      const diff = [diffX, diffY];
-
-      const clientX = window.innerWidth;
-      const x = Math.floor(Math.random() * clientX);
-
-      const clientY = window.innerHeight;
-      const y = Math.floor(Math.random() * clientY);
-
-      return {
-        coords: [x, y],
-        diff,
-        refreshOnFrame,
+        pointRadius,
       };
     }
   }
@@ -94,7 +85,7 @@ window.onload = () => {
 
         if (isLinePresent) {
           const strokeWidth = 1 - (lineDistance / lineRadius);
-          drawLine(startPoint, endPoint, `rgba(255, 255, 255, 0.4)`, strokeWidth, c);
+          drawLine(startPoint, endPoint, `rgba(255, 255, 255, 0.2)`, strokeWidth, c);
         }
       }
     }
@@ -111,14 +102,15 @@ window.onload = () => {
         : point;
 
       return { ...pointInfo, coords };
-    })
+    });
   }
 
   function drawPoints(pointsToShow, strokeStyle, c) {
     for (let pointInfo of pointsToShow) {
       const point = pointInfo.coords;
+      const pointRadius = pointInfo.pointRadius;
       c.beginPath();
-      c.arc(point[0], point[1], 3, 0, Math.PI * 2, false)
+      c.arc(point[0], point[1], pointRadius, 0, Math.PI * 2, false)
       c.fillStyle = strokeStyle;
       c.fill();
     }
@@ -153,8 +145,8 @@ window.onload = () => {
 
   function drawObjects(pointsToAnimate, canvasToDraw, c) {
     c.clearRect(0, 0, canvasToDraw.width, canvasToDraw.height);
-    drawPoints(pointsToAnimate, 'rgba(255, 0, 0, 0.7)', c);
     drawLines(pointsToAnimate, 150, c);
+    drawPoints(pointsToAnimate, 'rgba(255, 255, 255, 0.4)', c);
   }
 
   function calculateUpdatedPoints(prevPoints, timesRefreshed) {

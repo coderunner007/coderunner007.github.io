@@ -347,6 +347,16 @@ template {
 [hidden] {
   display: none;
 }
+
+/**
+ * Remove blue outline
+ */
+input:focus,
+textarea:focus {
+  border: none;
+  outline: none;
+}
+
 /*******Styling*******/
 
 body {
@@ -440,24 +450,54 @@ canvas {
   position: absolute;
   top: calc(50% - 100px);
   width: 50%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.input-holder {
+  width: 47%;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.input-holder--full {
+  width: 100%;
+}
+
+.underline {
+  background: transparent;
+  height: 1px;
+  width: 100%;
+  transform: translate(-100%, 0);
+  transition: transform ease-in 0.3s;
+}
+
+.input-holder:hover .underline {
+  background: white;
+  transform: translate(0, 0);
 }
 
 .contact input,
 .contact textarea {
   border: none;
-  height: 40px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.7);
+  position: relative;
+  font-family: 'Roboto', serif;
+  font-weight: 500;
+  padding: 10px;
+  box-sizing: border-box;
+  color: rgba(255, 255, 255, 0.6);
 }
 
-.contact input {
-  width: 50%;
-}
-
-.contact textarea,
-.contact input[placeholder=Subject] {
-  width: 100%;
+.contact textarea {
+  resize: none;
+  height: 150px;
 }
 
 .hidden {
   display: none;
 }
-

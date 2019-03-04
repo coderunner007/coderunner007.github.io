@@ -15,7 +15,7 @@ window.onload = () => {
   const refreshInterval = 8;
   const lowestRefreshRate = refreshInterval - 1;
   const highestRefreshRate = 3;
-  const maxPointRadius = 3;
+  const maxPointRadius = 2;
 
   function getNewPoint(edgePoint = false) {
     const refreshRateFactor = lowestRefreshRate - highestRefreshRate;
@@ -75,7 +75,7 @@ window.onload = () => {
     c.stroke();
   }
 
-  function drawLines(pointsToConnect, lineRadius, c) {
+  function drawLines(pointsToConnect, lineRadius, strokeStyle, c) {
     for (let pointFirst of pointsToConnect) {
       for (let pointSecond of pointsToConnect) {
         const startPoint = pointFirst.coords;
@@ -85,7 +85,7 @@ window.onload = () => {
 
         if (isLinePresent) {
           const strokeWidth = 1 - (lineDistance / lineRadius);
-          drawLine(startPoint, endPoint, `rgba(255, 255, 255, 0.2)`, strokeWidth, c);
+          drawLine(startPoint, endPoint, strokeStyle, strokeWidth, c);
         }
       }
     }
@@ -145,8 +145,8 @@ window.onload = () => {
 
   function drawObjects(pointsToAnimate, canvasToDraw, c) {
     c.clearRect(0, 0, canvasToDraw.width, canvasToDraw.height);
-    drawLines(pointsToAnimate, 150, c);
-    drawPoints(pointsToAnimate, 'rgba(255, 255, 255, 0.4)', c);
+    drawLines(pointsToAnimate, 150, 'rgba(255, 255, 255, 0.2)', c);
+    drawPoints(pointsToAnimate, 'rgba(255, 255, 255, 0.2)', c);
   }
 
   function calculateUpdatedPoints(prevPoints, timesRefreshed) {

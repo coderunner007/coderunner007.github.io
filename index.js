@@ -165,5 +165,27 @@ window.onload = () => {
     }
   }
 
-  setInterval(animate(), refreshInterval);
+  function drawMapFromActions(moves, c, offset = [0, 0], strokeStyle) {
+    c.beginPath();
+    c.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    c.lineWidth = 1;
+
+    for (let move of moves) {
+      const coords = move.point;
+      const offsetCoords = [coords[0] + offset[0], coords[1] + offset[1]];
+
+      if (move.action === 'L') {
+        c.lineTo(offsetCoords[0], offsetCoords[1]);
+      } else if (move.action === 'M') {
+        c.moveTo(offsetCoords[0], offsetCoords[1]);
+      } else if (move.action === 'Z') {
+        c.closePath();
+      }
+    }
+    c.stroke();
+  }
+
+
+  // setInterval(animate(), refreshInterval);
+  drawMapFromActions(india_map_moves, context, [400, 400])
 }

@@ -475,7 +475,7 @@ canvas {
   transition: transform ease-in 0.3s;
 }
 
-.input-holder:hover .underline {
+.input:hover .underline {
   background: white;
   transform: translate(0, 0);
 }

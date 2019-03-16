@@ -100,15 +100,6 @@ canvas {
   border-color: #000;
 }
 
-.contact {
-  position: absolute;
-  top: calc(50% - 100px);
-  width: 50%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
 .input-holder {
   width: 47%;
   margin: 10px;
@@ -134,9 +125,19 @@ canvas {
   transform: translate(0, 0);
 }
 
+/* contact-form */
+
 .contact {
-  transform: translate(0, 100vh);
-  transition: transform 0.3s ease-in;
+  transition: transform ease-in 0.3s;
+  position: absolute;
+  top: calc(50% - 100px);
+}
+
+.contact__fields {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .contact input,
@@ -157,6 +158,31 @@ canvas {
   height: 150px;
 }
 
+.contact .cross {
+  margin-left: 20px;
+  display: flex;
+  cursor: pointer;
+} 
+.contact .cross::before, 
+.contact .cross::after { 
+  display: block;
+  cursor: pointer;
+  content: ' ';
+  width: 1px;
+  height: 40px;
+  background: white;
+  transition: transform ease-in 0.5s;
+}
+
+.contact .cross::before {
+  transform: rotate(90deg);
+}
+
+.contact .cross::after {
+  transform: rotate(-90deg);
+}
+/* toggle forms */
+
 .content.contact-form--is-shown #canvas {
   filter: blur(3px);
 }
@@ -164,14 +190,20 @@ canvas {
 .content.contact-form--is-shown .contact {
   transform: translate(0, 0);
 }
+
 .content.contact-form--is-shown .content__intro {
   opacity: 0;
 }
 
-.content.contact-form--is-shown .contact {
-  transform: translate(0, 0);
+.content.contact-form--is-shown .contact .cross::before {
+  transform: rotate(45deg); 
+}
+
+.content.contact-form--is-shown .contact .cross::after {
+  transform: rotate(-45deg); 
 }
 
 .content.intro--is-shown .contact {
   transform: translate(0, 100vh);
 }
+

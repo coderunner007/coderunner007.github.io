@@ -207,6 +207,10 @@ window.onload = () => {
       'click',
       toggleContactForm
     );
+    document.getElementById('close').addEventListener(
+      'click',
+      toggleContactForm
+    );
     setInterval(animate(), refreshInterval);
 
     const content = document.getElementById('content');

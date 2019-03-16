@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <title>Hi, I am Alan</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:900"
-      rel="stylesheet"
-    >
+    <link rel="stylesheet" type="text/css" href="normalize.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
     <script src="mapUtil/india_map.js"></script>
     <script src="index.js"></script>
   </head>
   <body>
-    <div class="content">
+    <div class="content" id="content">
       <canvas id="canvas"></canvas>
       <div class="content__intro">
         <h2>I'm Alan Joseph</h2>
@@ -24,22 +22,23 @@
           <div class="separator"></div>
           <label>React.js</label>
         </div>
-        <div class="content__links">
-          <a
-            class="content__links__link content__links__link--linkedin"
-            href="https://www.linkedin.com/in/alan-joseph-93938b100"
-          >
-            <img src="static/linkedin.svg" alt="linkedin" />
-          </a>
-          <a
-            class="content__links__link content__links__link--github"
-            href="https://github.com/coderunner007"
-           >
-            <img src="static/github.svg" alt="github" />
-          </a>
-        </div>
+        <!-- <div class="content__links"> -->
+        <!--   <a -->
+        <!--     class="content__links__link content__links__link--linkedin" -->
+        <!--     href="https://www.linkedin.com/in/alan-joseph-93938b100" -->
+        <!--   > -->
+        <!--     <img src="static/linkedin.svg" alt="linkedin" /> -->
+        <!--   </a> -->
+        <!--   <a -->
+        <!--     class="content__links__link content__links__link--github" -->
+        <!--     href="https://github.com/coderunner007" -->
+        <!--    > -->
+        <!--     <img src="static/github.svg" alt="github" /> -->
+        <!--   </a> -->
+        <!-- </div> -->
+        <button id="contact-me">CONTACT ME</button>
       </div>
-      <div class="contact hidden">
+      <div class="contact">
         <div class="input-holder">
           <input type="text" placeholder="Name" />
           <div class="underline"></div>

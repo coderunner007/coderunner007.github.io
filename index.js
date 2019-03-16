@@ -16,6 +16,9 @@ window.onload = () => {
   const lowestRefreshRate = refreshInterval - 1;
   const highestRefreshRate = 3;
   const maxPointRadius = 2;
+  const appState = {
+    isContactFormShown: false,
+  };
 
   function getNewPoint(edgePoint = false) {
     const refreshRateFactor = lowestRefreshRate - highestRefreshRate;
@@ -185,7 +188,42 @@ window.onload = () => {
     c.stroke();
   }
 
+  function toggleContactForm() {
+    const content = document.getElementById('content');
+    const intro = document.getElementById('intro');
+    appState.isContactFormShown = !appState.isContactFormShown;
 
-  // setInterval(animate(), refreshInterval);
-  drawMapFromActions(india_map_moves, context, [400, 400])
+    if (appState.isContactFormShown) {
+      content.classList.remove('intro--is-shown');
+      content.classList.add('contact-form--is-shown');
+    } else if (!appState.isContactFormShown) {
+      content.classList.remove('contact-form--is-shown');
+      content.classList.add('intro--is-shown');
+    }
+  }
+
+  function initApp() {
+    document.getElementById('contact-me').addEventListener(
+      'click',
+      toggleContactForm
+    );
+    setInterval(animate(), refreshInterval);
+
+    const content = document.getElementById('content');
+    if (
+      appState.isContactFormShown &&
+      !content.classList.contains('contact-form--is-shown')
+    ) {
+      content.classList.add('contact-form--is-shown');
+    } else if (
+      !appState.isContactFormShown &&
+      !content.classList.contains('intro--is-shown')
+    ) {
+      content.classList.add('intro--is-shown');
+    }
+
+    // drawMapFromActions(india_map_moves, context, [400, 400])
+  }
+
+  initApp();
 }

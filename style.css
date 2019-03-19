@@ -20,11 +20,6 @@ button {
   font-family: 'Roboto', 'serif';
   font-size: 15px;
   cursor: pointer;
-  animation: pulsate 1.2s ease-in infinite;
-  position: absolute;
-  bottom: 50px;
-  right: calc(50% - 62px);
-  transition: transform ease-in 0.3s;
 }
 
 canvas {
@@ -32,6 +27,18 @@ canvas {
   background: #1D4350;
   background: -webkit-linear-gradient(to left, #A43931, #1D4350);
   background: linear-gradient(to left, #A43931, #1D4350);
+}
+
+#contact-me {
+  animation: pulsate 1.2s ease-in infinite;
+  position: absolute;
+  bottom: 50px;
+  right: calc(50% - 62px);
+  transition: transform ease-in 0.3s;
+}
+
+#submit {
+  margin: 20px 20px 0 auto;
 }
 
 .separator {
@@ -116,8 +123,18 @@ canvas {
   flex-direction: column;
 }
 
-.contact__fields {
+.contact__content {
   width: 50%;
+  margin-top: auto;
+}
+
+.contact__content__header {
+  font-weight: 300;
+  margin: 0 0 10px 0;
+  color: #ffffff8f;
+}
+
+.contact__content__fields {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -176,7 +193,6 @@ canvas {
   padding-left: 20px;
   cursor: pointer;
   display: flex;
-  flex-grow: 1;
 }
 
 .contact .cross::before,

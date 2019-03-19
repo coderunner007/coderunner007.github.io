@@ -1,8 +1,14 @@
 window.onload = () => {
   const canvas = document.getElementById('canvas');
   const context = canvas.getContext('2d');
-  const canvasWidth = window.innerWidth;
-  const canvasHeight = window.innerHeight;
+  const canvasWidth = Math.min(
+    document.documentElement.clientWidth,
+    window.innerWidth || 0
+  );
+  const canvasHeight = Math.min(
+    document.documentElement.clientHeight,
+    window.innerHeight || 0
+  );
   const canvasStartX = 0;
   const canvasStartY = 0;
   const canvasEndX = canvasWidth;
@@ -26,7 +32,7 @@ window.onload = () => {
   };
 
   function getInitNoOfPoints() {
-    return 200;
+    return 100;
   }
 
   function getNewPoint(
@@ -233,11 +239,11 @@ window.onload = () => {
     if (appState.isContactFormShown) {
       content.classList.remove('intro--is-shown');
       content.classList.add('contact-form--is-shown');
-      translateContactButton();
+      // translateContactButton();
     } else if (!appState.isContactFormShown) {
       content.classList.remove('contact-form--is-shown');
       content.classList.add('intro--is-shown');
-      translateContactButton();
+      // translateContactButton();
     }
   }
 

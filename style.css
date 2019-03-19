@@ -20,6 +20,11 @@ button {
   font-family: 'Roboto', 'serif';
   font-size: 15px;
   cursor: pointer;
+  animation: pulsate 1.2s ease-in infinite;
+  position: absolute;
+  bottom: 50px;
+  right: calc(50% - 62px);
+  transition: transform ease-in 0.3s;
 }
 
 canvas {
@@ -100,37 +105,13 @@ canvas {
   border-color: #000;
 }
 
-.input-holder {
-  width: 47%;
-  margin: 10px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.input-holder--full {
-  width: 100%;
-}
-
-.underline {
-  background: transparent;
-  height: 1px;
-  width: 100%;
-  transform: translate(-100%, 0);
-  transition: transform ease-in 0.3s;
-}
-
-.input:hover .underline {
-  background: white;
-  transform: translate(0, 0);
-}
-
-/* contact-form */
-
 .contact {
   transition: transform ease-in 0.3s;
   position: absolute;
-  top: calc(50% - 100px);
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 20px;
 }
 
 .contact__fields {
@@ -144,27 +125,47 @@ canvas {
 .contact textarea {
   border: none;
   height: 50px;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
   position: relative;
   font-family: 'Roboto', serif;
   font-weight: 500;
   padding: 10px;
   box-sizing: border-box;
   color: rgba(255, 255, 255, 0.6);
+
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.contact input {
+  width: 46%;
+}
+
+.contact input[placeholder="Email"] {
+  margin-right: 10px;
+}
+
+.contact input[placeholder="Subject"] {
+  width: 100%;
 }
 
 .contact textarea {
   resize: none;
   height: 150px;
+  width: 100%;
 }
 
 .contact .cross {
   margin-left: 20px;
   display: flex;
   cursor: pointer;
-} 
-.contact .cross::before, 
-.contact .cross::after { 
+}
+
+.contact .cross::before,
+.contact .cross::after {
   display: block;
   cursor: pointer;
   content: ' ';
@@ -196,14 +197,23 @@ canvas {
 }
 
 .content.contact-form--is-shown .contact .cross::before {
-  transform: rotate(45deg); 
+  transform: rotate(45deg);
 }
 
 .content.contact-form--is-shown .contact .cross::after {
-  transform: rotate(-45deg); 
+  transform: rotate(-45deg);
 }
 
 .content.intro--is-shown .contact {
   transform: translate(0, 100vh);
 }
 
+@keyframes pulsate {
+  0% {
+    box-shadow: 0 0 5px 0 rgba(255,255,255, 1);
+  }
+
+  100% {
+    box-shadow: 0 0 15px 10px rgba(255,255,255, 0);
+  }
+}

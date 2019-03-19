@@ -18,6 +18,10 @@ window.onload = () => {
   const maxPointRadius = 2;
   const appState = {
     isContactFormShown: false,
+    prevContactButtonCoords: {
+      x: 100,
+      y: 100,
+    },
   };
 
   function getNewPoint(edgePoint = false) {
@@ -196,10 +200,36 @@ window.onload = () => {
     if (appState.isContactFormShown) {
       content.classList.remove('intro--is-shown');
       content.classList.add('contact-form--is-shown');
+      translateContactButton();
     } else if (!appState.isContactFormShown) {
       content.classList.remove('contact-form--is-shown');
       content.classList.add('intro--is-shown');
+      translateContactButton();
     }
+  }
+
+  function translateContactButton() {
+    const contactButton = document.getElementById('contact-me');
+    const rect = contactButton.getBoundingClientRect();
+    // FLIP
+    // First
+    const currentX = rect.x;
+    const currentY = rect.y;
+
+    // Last
+    const nextX = appState.prevContactButtonCoords.x;
+    const nextY = appState.prevContactButtonCoords.y;
+    appState.prevContactButtonCoords = {
+      x: nextX,
+      y: nextX,
+    };
+
+    // Invert
+    const diffX = nextX - currentX;
+    const diffY = nextY - currentY;
+
+    // Play
+    contactButton.style.transform = `translate(${diffX}px, ${diffY}px)`;
   }
 
   function initApp() {

@@ -1,14 +1,8 @@
 window.onload = () => {
   const canvas = document.getElementById('canvas');
   const context = canvas.getContext('2d');
-  const canvasWidth = Math.min(
-    document.documentElement.clientWidth,
-    window.innerWidth || 0
-  );
-  const canvasHeight = Math.min(
-    document.documentElement.clientHeight,
-    window.innerHeight || 0
-  );
+  const canvasWidth = window.innerWidth;
+  const canvasHeight = window.innerHeight;
   const canvasStartX = 0;
   const canvasStartY = 0;
   const canvasEndX = canvasWidth;

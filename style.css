@@ -38,7 +38,16 @@ canvas {
 }
 
 #submit {
-  margin: 20px 20px 0 auto;
+  margin: 20px 10px 20px auto;
+  transform: translate(0, 100px);
+}
+
+#submit,
+.contact__content__header {
+  opacity: 0;
+  transition-property: transform, opacity;
+  transition-duration: 0.8s;
+  transition-timing-function: ease-in;
 }
 
 .separator {
@@ -126,6 +135,9 @@ canvas {
 .contact__content {
   width: 50%;
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  margin: auto 0;
 }
 
 .contact__content__header {
@@ -193,6 +205,9 @@ canvas {
   padding-left: 20px;
   cursor: pointer;
   display: flex;
+  min-height: 40px;
+  opacity: 0;
+  transition: opacity ease-in 1.2s;
 }
 
 .contact .cross::before,
@@ -203,7 +218,7 @@ canvas {
   width: 1px;
   height: 40px;
   background: white;
-  transition: transform ease-in 0.5s;
+  transition: transform ease-in 0.7s;
 }
 
 .contact .cross::before {
@@ -234,12 +249,26 @@ canvas {
   opacity: 0;
 }
 
+.content.contact-form--is-shown .contact .cross {
+  opacity: 1;
+}
+
 .content.contact-form--is-shown .contact .cross::before {
   transform: rotate(45deg);
 }
 
 .content.contact-form--is-shown .contact .cross::after {
   transform: rotate(-45deg);
+}
+
+.content.contact-form--is-shown .contact__content__header,
+.content.contact-form--is-shown #submit {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.content.contact-form--is-shown #contact-me {
+  opacity: 0;
 }
 
 .content.intro--is-shown .contact {

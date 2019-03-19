@@ -112,6 +112,8 @@ canvas {
   width: 100vw;
   height: 100vh;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .contact__fields {
@@ -119,6 +121,9 @@ canvas {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  flex-grow: 0;
+  align-items: flex-end;
+  margin-bottom: 20px;
 }
 
 .contact input,
@@ -138,30 +143,40 @@ canvas {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  opacity: 0;
+  transition-property: transform, opacity;
+  transition-duration: 0.8s;
+  transition-timing-function: cubic-bezier(0, 1.13, 0.9, 1.14);
 }
 
 .contact input {
   width: 46%;
+  transform: translate(0, calc(50vh - 100px));
 }
 
 .contact input[placeholder="Email"] {
   margin-right: 10px;
+  transition-duration: 0.9s;
 }
 
 .contact input[placeholder="Subject"] {
   width: 100%;
+  transition-duration: 1.0s;
 }
 
 .contact textarea {
   resize: none;
   height: 150px;
   width: 100%;
+  transform: translate(0, 150px);
+  transition-duration: 1.1s;
 }
 
 .contact .cross {
-  margin-left: 20px;
-  display: flex;
+  padding-left: 20px;
   cursor: pointer;
+  display: flex;
+  flex-grow: 1;
 }
 
 .contact .cross::before,
@@ -182,7 +197,8 @@ canvas {
 .contact .cross::after {
   transform: rotate(-90deg);
 }
-/* toggle forms */
+
+/******** animations ********/
 
 .content.contact-form--is-shown #canvas {
   filter: blur(3px);
@@ -190,6 +206,12 @@ canvas {
 
 .content.contact-form--is-shown .contact {
   transform: translate(0, 0);
+}
+
+.content.contact-form--is-shown input,
+.content.contact-form--is-shown textarea {
+  transform: translate(0, 0);
+  opacity: 1;
 }
 
 .content.contact-form--is-shown .content__intro {
@@ -208,6 +230,7 @@ canvas {
   transform: translate(0, 100vh);
 }
 
+/******** animations ********/
 @keyframes pulsate {
   0% {
     box-shadow: 0 0 5px 0 rgba(255,255,255, 1);

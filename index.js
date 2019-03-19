@@ -10,12 +10,13 @@ window.onload = () => {
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
 
-  const initNoOfPoints = 80;
-  const minNoOfPoints = initNoOfPoints;
-  const refreshInterval = 8;
+  const minNoOfPoints = 10;
+  const initPoints = getInitNoOfPoints();
+  const refreshInterval = 10;
   const lowestRefreshRate = refreshInterval - 1;
   const highestRefreshRate = 3;
   const maxPointRadius = 2;
+  const minPointRadius = 4;
   const appState = {
     isContactFormShown: false,
     prevContactButtonCoords: {
@@ -24,12 +25,22 @@ window.onload = () => {
     },
   };
 
-  function getNewPoint(edgePoint = false) {
+  function getInitNoOfPoints() {
+    return 200;
+  }
+
+  function getNewPoint(
+    edgePoint = false,
+    minRadius=minPointRadius,
+    maxRadius=maxPointRadius
+  ) {
     const refreshRateFactor = lowestRefreshRate - highestRefreshRate;
     const refreshOnFrame = Math.floor(
       Math.random() * refreshRateFactor
     ) + highestRefreshRate;
-    const pointRadius = Math.floor(Math.random() * maxPointRadius) + 1;
+    const pointRadius = Math.floor(
+      Math.random() * (maxRadius - minRadius) + minRadius
+    ) + 1;
 
     {
       const diffX = (Math.random() * 2) - 1;
@@ -54,7 +65,7 @@ window.onload = () => {
   function getNewPoints() {
     const newPoints = [];
 
-    for(let i = 0; i < initNoOfPoints; i++) {
+    for(let i = 0; i < initPoints; i++) {
       const newPoint = getNewPoint();
 
       newPoints.push(newPoint);
@@ -98,15 +109,35 @@ window.onload = () => {
     }
   }
 
+  function calculateNextPoint(pointInfo, timesRefreshed) {
+    const point = pointInfo.coords;
+    const diffX = pointInfo.diff[0];
+    const diffY = pointInfo.diff[1];
+
+    const newPoint = [point[0] + diffX, point[1] + diffY];
+    if (newPoint[0] > canvasWidth) {
+      newPoint[0] = 0;
+    } else if (newPoint[0] < 0) {
+      newPoint[0] = canvasWidth;
+    }
+    if (newPoint[1] > canvasHeight) {
+      newPoint[1] = 0;
+    } else if (newPoint[1] < 0) {
+      newPoint[1] = canvasHeight;
+    }
+
+    // console.log(newPoint, canvasHeight, canvasWidth, diffX, diffY);
+
+    const isToBeMoved = timesRefreshed % point.refreshOnFrame !== 0;
+    return isToBeMoved
+      ? newPoint
+      : point;
+
+  }
+
   function movePoints(pointsToAnimate, timesRefreshed) {
-    return pointsToAnimate.map((pointInfo, index) => {
-      const point = pointInfo.coords;
-      const diffX = pointInfo.diff[0];
-      const diffY = pointInfo.diff[1];
-      const isToBeMoved = timesRefreshed % point.refreshOnFrame !== 0;
-      const coords = isToBeMoved
-        ? [point[0] + diffX, point[1] + diffY]
-        : point;
+    return pointsToAnimate.map((pointInfo, index, timesRefreshed) => {
+      const coords = calculateNextPoint(pointInfo);
 
       return { ...pointInfo, coords };
     });
@@ -135,6 +166,7 @@ window.onload = () => {
   }
 
   function updatePoints(pointsToUpdate) {
+    console.log('updated');
     const totalPoints = pointsToUpdate.length;
     const pointsToAdd = minNoOfPoints - totalPoints;
     const updatedPoints = pointsToUpdate.filter(
@@ -158,7 +190,8 @@ window.onload = () => {
 
   function calculateUpdatedPoints(prevPoints, timesRefreshed) {
     const newPoints = movePoints(prevPoints, timesRefreshed);
-    return updatePoints(newPoints);
+    return newPoints;
+    // return updatePoints(newPoints);
   }
 
   function animate() {
